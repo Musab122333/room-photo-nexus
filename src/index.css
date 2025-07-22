@@ -1,117 +1,53 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Modern Cloud Gallery Design System - Warm, Collaborative, Clean */
-
 @layer base {
   :root {
     /* Warm neutral palette */
-    --background: 28 25% 97%; /* Warm cream white */
-    --foreground: 25 25% 15%; /* Rich dark brown */
-
-    --card: 30 30% 98%; /* Soft cream cards */
+    --background: 28 25% 97%;
+    --foreground: 25 25% 15%;
+    --card: 30 30% 98%;
     --card-foreground: 25 25% 15%;
-
     --popover: 30 30% 98%;
     --popover-foreground: 25 25% 15%;
-
-    /* Sage green primary - collaborative feel */
-    --primary: 95 20% 45%; /* Sage green */
+    --primary: 95 20% 45%;
     --primary-foreground: 30 30% 98%;
-    --primary-hover: 95 25% 40%;
-
-    /* Soft secondary tones */
-    --secondary: 25 15% 92%; /* Light warm gray */
+    --secondary: 25 15% 92%;
     --secondary-foreground: 25 25% 25%;
-
-    /* Muted backgrounds */
     --muted: 25 12% 94%;
     --muted-foreground: 25 15% 55%;
-
-    /* Warm accent colors */
-    --accent: 35 45% 88%; /* Warm peach accent */
+    --accent: 35 45% 88%;
     --accent-foreground: 25 25% 20%;
-
-    /* Soft destructive */
     --destructive: 5 70% 55%;
     --destructive-foreground: 30 30% 98%;
-
-    /* Subtle borders */
     --border: 25 15% 88%;
     --input: 25 15% 90%;
     --ring: 95 20% 45%;
-
-    /* Rounded design system */
     --radius: 0.75rem;
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
   .dark {
-    /* Dark mode with warm undertones */
-    --background: 25 25% 8%; /* Warm dark background */
-    --foreground: 28 25% 95%; /* Warm light text */
-
-    --card: 25 20% 12%; /* Warm dark cards */
+    --background: 25 25% 8%;
+    --foreground: 28 25% 95%;
+    --card: 25 20% 12%;
     --card-foreground: 28 25% 95%;
-
     --popover: 25 20% 12%;
     --popover-foreground: 28 25% 95%;
-
-    --primary: 95 25% 55%; /* Brighter sage in dark mode */
+    --primary: 95 25% 55%;
     --primary-foreground: 25 25% 8%;
-    --primary-hover: 95 30% 60%;
-
-    --secondary: 25 15% 18%; /* Dark warm secondary */
+    --secondary: 25 15% 18%;
     --secondary-foreground: 28 25% 85%;
-
     --muted: 25 12% 15%;
     --muted-foreground: 25 15% 65%;
-
-    --accent: 35 35% 25%; /* Darker warm accent */
+    --accent: 35 35% 25%;
     --accent-foreground: 28 25% 95%;
-
     --destructive: 5 70% 60%;
     --destructive-foreground: 28 25% 95%;
-
     --border: 25 15% 20%;
     --input: 25 15% 18%;
     --ring: 95 25% 55%;
-
-    /* Sidebar dark mode */
-    --sidebar-background: 25 20% 10%;
-    --sidebar-foreground: 28 25% 90%;
-    --sidebar-primary: 95 25% 55%;
-    --sidebar-primary-foreground: 25 25% 8%;
-    --sidebar-accent: 25 15% 15%;
-    --sidebar-accent-foreground: 28 25% 90%;
-    --sidebar-border: 25 15% 18%;
-    --sidebar-ring: 95 25% 55%;
-  }
-
-  /* Custom gradients for the gallery platform */
-  :root {
-    --gradient-warm: linear-gradient(135deg, hsl(var(--background)), hsl(var(--card)));
-    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-hover)));
-    --gradient-card: linear-gradient(145deg, hsl(var(--card)), hsl(var(--accent)));
-    --shadow-soft: 0 4px 20px -4px hsl(var(--primary) / 0.1);
-    --shadow-card: 0 8px 32px -8px hsl(var(--primary) / 0.15);
-    --shadow-hover: 0 12px 40px -8px hsl(var(--primary) / 0.2);
   }
 }
 
@@ -121,64 +57,38 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply bg-background text-foreground;
   }
 }
 
 @layer components {
-  /* Gallery-specific components */
   .gallery-card {
-    @apply bg-card border border-border rounded-xl shadow-[var(--shadow-card)] 
-           transition-all duration-300 ease-out hover:shadow-[var(--shadow-hover)] 
-           hover:-translate-y-1;
+    @apply bg-card border border-border rounded-xl shadow-md transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
   }
   
   .room-card {
     @apply gallery-card p-6 cursor-pointer hover:scale-[1.02];
   }
   
-  .photo-grid {
-    @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 
-           gap-4 md:gap-6 p-4 md:p-6;
-  }
-  
-  .photo-card {
-    @apply relative aspect-square overflow-hidden rounded-lg shadow-[var(--shadow-soft)]
-           transition-all duration-300 hover:shadow-[var(--shadow-card)]
-           hover:scale-105 cursor-pointer;
-  }
-  
   .hero-gradient {
     @apply bg-gradient-to-br from-background via-card to-accent/20;
-  }
-  
-  .glass-effect {
-    @apply bg-card/80 backdrop-blur-sm border border-border/50;
-  }
-  
-  .hover-lift {
-    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-hover)];
   }
 }
 
 @layer utilities {
-  .text-gradient {
-    @apply bg-gradient-to-r from-primary to-accent-foreground bg-clip-text text-transparent;
-  }
-  
   .animate-fade-in {
-    animation: fade-in 0.6s ease-out forwards;
+    animation: fadeIn 0.6s ease-out forwards;
   }
   
   .animate-slide-up {
-    animation: slide-up 0.8s ease-out forwards;
+    animation: slideUp 0.8s ease-out forwards;
   }
   
   .animate-scale-in {
-    animation: scale-in 0.4s ease-out forwards;
+    animation: scaleIn 0.4s ease-out forwards;
   }
   
-  @keyframes fade-in {
+  @keyframes fadeIn {
     from {
       opacity: 0;
       transform: translateY(20px);
@@ -189,7 +99,7 @@
     }
   }
   
-  @keyframes slide-up {
+  @keyframes slideUp {
     from {
       opacity: 0;
       transform: translateY(40px);
@@ -200,7 +110,7 @@
     }
   }
   
-  @keyframes scale-in {
+  @keyframes scaleIn {
     from {
       opacity: 0;
       transform: scale(0.95);
