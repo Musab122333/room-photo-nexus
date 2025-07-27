@@ -44,7 +44,7 @@ const RoomGallery = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navigation isAuthenticated={true} user={{ name: "John Doe" }} />
+      <Navigation />
       
       {/* Room Header */}
       <div className="hero-gradient border-b border-border">

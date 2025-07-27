@@ -9,17 +9,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useAuth } from "@/hooks/useAuth";
 
-interface NavigationProps {
-  isAuthenticated?: boolean;
-  user?: {
-    name: string;
-    avatar?: string;
-  };
-}
-
-const Navigation = ({ isAuthenticated = false, user }: NavigationProps) => {
+const Navigation = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { user, profile, signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOut();
+  };
 
   return (
     <header className="glass-effect border-b border-border/50 sticky top-0 z-50">
@@ -34,7 +32,7 @@ const Navigation = ({ isAuthenticated = false, user }: NavigationProps) => {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-8">
-          {isAuthenticated ? (
+          {user && profile ? (
             <>
               <Link to="/dashboard" className="text-muted-foreground hover:text-foreground transition-colors">
                 My Rooms
@@ -47,10 +45,10 @@ const Navigation = ({ isAuthenticated = false, user }: NavigationProps) => {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-                    {user?.avatar ? (
+                    {profile.avatar_url ? (
                       <img 
-                        src={user.avatar} 
-                        alt={user.name}
+                        src={profile.avatar_url} 
+                        alt={profile.username}
                         className="h-10 w-10 rounded-full object-cover"
                       />
                     ) : (
@@ -68,7 +66,7 @@ const Navigation = ({ isAuthenticated = false, user }: NavigationProps) => {
                     <span>Settings</span>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleSignOut}>
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>Log out</span>
                   </DropdownMenuItem>
@@ -102,7 +100,7 @@ const Navigation = ({ isAuthenticated = false, user }: NavigationProps) => {
       {isMobileMenuOpen && (
         <div className="md:hidden glass-effect border-t border-border/50 animate-fade-in">
           <div className="container mx-auto px-6 py-4 space-y-4">
-            {isAuthenticated ? (
+            {user && profile ? (
               <>
                 <Link 
                   to="/dashboard" 
@@ -125,7 +123,14 @@ const Navigation = ({ isAuthenticated = false, user }: NavigationProps) => {
                 >
                   Profile
                 </Link>
-                <Button variant="ghost" className="w-full justify-start">
+                <Button 
+                  variant="ghost" 
+                  className="w-full justify-start"
+                  onClick={() => {
+                    handleSignOut();
+                    setIsMobileMenuOpen(false);
+                  }}
+                >
                   <LogOut className="mr-2 h-4 w-4" />
                   Log out
                 </Button>

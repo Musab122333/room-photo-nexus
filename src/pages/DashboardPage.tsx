@@ -4,7 +4,7 @@ import Dashboard from "@/components/dashboard/Dashboard";
 const DashboardPage = () => {
   return (
     <>
-      <Navigation isAuthenticated={true} user={{ name: "John Doe" }} />
+      <Navigation />
       <Dashboard />
     </>
   );

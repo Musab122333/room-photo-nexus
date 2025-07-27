@@ -102,7 +102,7 @@ const AIGallery = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navigation isAuthenticated={true} user={{ name: "John Doe" }} />
+      <Navigation />
       
       {/* Header */}
       <div className="hero-gradient border-b border-border">

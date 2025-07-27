@@ -1,10 +1,11 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { useAuth } from "@/hooks/useAuth";
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -12,11 +13,35 @@ const LoginForm = () => {
     email: "",
     password: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
+  
+  const { signIn, signInWithGoogle, user } = useAuth();
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (user) {
+      navigate("/dashboard");
+    }
+  }, [user, navigate]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implement login logic with Supabase
-    console.log("Login attempt:", formData);
+    setIsLoading(true);
+    
+    const { error } = await signIn(formData.email, formData.password);
+    
+    if (!error) {
+      navigate("/dashboard");
+    }
+    
+    setIsLoading(false);
+  };
+
+  const handleGoogleSignIn = async () => {
+    setIsLoading(true);
+    await signInWithGoogle();
+    setIsLoading(false);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -98,12 +123,24 @@ const LoginForm = () => {
             </div>
 
             {/* Submit Button */}
-            <Button type="submit" className="w-full" size="lg">
-              Sign In
+            <Button 
+              type="submit" 
+              className="w-full" 
+              size="lg"
+              disabled={isLoading}
+            >
+              {isLoading ? "Signing In..." : "Sign In"}
             </Button>
 
             {/* Google Sign In */}
-            <Button type="button" variant="outline" className="w-full" size="lg">
+            <Button 
+              type="button" 
+              variant="outline" 
+              className="w-full" 
+              size="lg"
+              onClick={handleGoogleSignIn}
+              disabled={isLoading}
+            >
               <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
                 <path
                   fill="currentColor"

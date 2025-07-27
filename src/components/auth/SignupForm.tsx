@@ -1,25 +1,56 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Mail, Lock, User, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { useAuth } from "@/hooks/useAuth";
 
 const SignupForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    name: "",
+    username: "",
     email: "",
     password: "",
     agreedToTerms: false,
   });
+  const [isLoading, setIsLoading] = useState(false);
+  
+  const { signUp, signInWithGoogle, user } = useAuth();
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (user) {
+      navigate("/dashboard");
+    }
+  }, [user, navigate]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implement signup logic with Supabase
-    console.log("Signup attempt:", formData);
+    
+    if (!formData.agreedToTerms) {
+      return;
+    }
+    
+    setIsLoading(true);
+    
+    const { error } = await signUp(formData.email, formData.password, formData.username);
+    
+    if (!error) {
+      // Don't navigate immediately - user needs to confirm email first
+      // The useAuth hook will handle the redirect after email confirmation
+    }
+    
+    setIsLoading(false);
+  };
+
+  const handleGoogleSignIn = async () => {
+    setIsLoading(true);
+    await signInWithGoogle();
+    setIsLoading(false);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,17 +87,17 @@ const SignupForm = () => {
               </div>
             </div>
 
-            {/* Name Field */}
+            {/* Username Field */}
             <div className="space-y-2">
-              <Label htmlFor="name">Full name</Label>
+              <Label htmlFor="username">Username</Label>
               <div className="relative">
                 <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
-                  id="name"
-                  name="name"
+                  id="username"
+                  name="username"
                   type="text"
-                  placeholder="Enter your full name"
-                  value={formData.name}
+                  placeholder="Choose a username"
+                  value={formData.username}
                   onChange={handleInputChange}
                   className="pl-10"
                   required
@@ -150,13 +181,20 @@ const SignupForm = () => {
               type="submit" 
               className="w-full" 
               size="lg"
-              disabled={!formData.agreedToTerms}
+              disabled={isLoading || !formData.agreedToTerms}
             >
-              Create Account
+              {isLoading ? "Creating Account..." : "Create Account"}
             </Button>
 
             {/* Google Sign In */}
-            <Button type="button" variant="outline" className="w-full" size="lg">
+            <Button 
+              type="button" 
+              variant="outline" 
+              className="w-full" 
+              size="lg"
+              onClick={handleGoogleSignIn}
+              disabled={isLoading}
+            >
               <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
                 <path
                   fill="currentColor"
